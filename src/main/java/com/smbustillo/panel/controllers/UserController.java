@@ -1,28 +1,35 @@
 package com.smbustillo.panel.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.smbustillo.panel.models.Usuario;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class UserController {
 
+    /*new Usuario(1,"Susana",
+                    "Martinez","123455","smbustillo@gmail"));*/
+
+    static List<Usuario> lstUsuarios =
+            new ArrayList<>();
+
     @GetMapping("/api/usuarios")
-    public String helloWorld() {
-        return "[\n" +
-                "  {\n" +
-                "    \"id\": 1,\n" +
-                "    \"nombre\": \"lucas\",\n" +
-                "    \"apellido\": \"moy\",\n" +
-                "    \"telefono\":\"213123423\",\n" +
-                "    \"email\": \"lucasmoy.dev@atl.academy\"\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"id\": 1,\n" +
-                "    \"nombre\": \"lucas\",\n" +
-                "    \"apellido\": \"moy\",\n" +
-                "    \"telefono\":\"213123423\",\n" +
-                "    \"email\": \"lucasmoy.dev@atl.academy\"\n" +
-                "  }\n" +
-                "]";
+    public List<Usuario> getUsers() {
+        return lstUsuarios;
+    }
+
+    @DeleteMapping("/api/usuarios/{id}")
+    public void deleteUser(@PathVariable String id){
+        //Usuario found = lstUsuarios.stream().filter(user-> user.getId().equals(id)).findFirst().get();
+        Usuario found = lstUsuarios.stream().filter(user-> id.equals(user.getId().toString())).findFirst().get();
+        lstUsuarios.remove(found);
+
+    }
+
+    @PostMapping("/api/usuarios")
+    public void addUser( @RequestBody Usuario user) {
+        lstUsuarios.add(user);
     }
 }
